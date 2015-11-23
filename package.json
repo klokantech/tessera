@@ -1,14 +1,17 @@
 {
-  "name": "tessera",
+  "name": "tileserver-tessera",
   "version": "0.5.3",
   "description": "A tilelive-based tile server",
   "main": "lib/app.js",
   "bin": "bin/tessera.js",
-  "author": "Seth Fitzsimmons <seth@mojodna.net>",
+  "authors": [
+    "Seth Fitzsimmons <seth@mojodna.net>",
+    "Petr Sloup <petr.sloup@klokantech.com>"
+  ],
   "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mojodna/tessera.git"
+    "url": "https://github.com/klokantech/tileserver-tessera.git"
   },
   "scripts": {
     "prepublish": "npm install bower && bower install"
