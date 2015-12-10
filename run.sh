@@ -6,13 +6,14 @@ set -o nounset
 readonly SOURCE_DATA_DIR=${SOURCE_DATA_DIR:-/data}
 readonly DEST_DATA_DIR=${DEST_DATA_DIR:-/project}
 readonly TESSERA_CONFIG="$DEST_DATA_DIR/config.json"
+
 readonly PORT=${PORT:-80}
 readonly CACHE_SIZE=${CACHE_SIZE:-10}
 readonly SOURCE_CACHE_SIZE=${SOURCE_CACHE_SIZE:-10}
 
 function serve_xray() {
     local mbtiles_file=$1
-    exec tessera "xray+mbtiles://$mbtiles_file" \
+    exec bin/tessera.js "xray+mbtiles://$mbtiles_file" \
         --PORT $PORT \
         --cache-size $CACHE_SIZE \
         --source-cache-size $SOURCE_CACHE_SIZE
@@ -78,7 +79,7 @@ function replace_sources() {
 }
 
 function serve_config() {
-    exec tessera -c "$TESSERA_CONFIG" \
+    exec bin/tessera.js -c "$TESSERA_CONFIG" \
         --PORT "$PORT" \
         --cache-size "$CACHE_SIZE" \
         --source-cache-size "$SOURCE_CACHE_SIZE"
