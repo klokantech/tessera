@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="//tileserver.com/v1/index.css" />
   <script src="//tileserver.com/v1/index.js"></script>
+  <style>
+    #header {background-color:#a2d288;}
+    h2 {color:#82b268;}
+    #strap {visibility:hidden !important;}
+    #strap:before {content: 'Maps rendered by Mapnik from vector tiles';visibility:visible !important;}
+  </style>
 <body>
   <script>tileserver({index: "/index.json"});</script>
 </body>
