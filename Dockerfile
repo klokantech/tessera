@@ -20,26 +20,24 @@ RUN wget -q -P /fonts https://github.com/aaronlidman/Toner-for-Tilemill/raw/mast
 
 ENV MAPNIK_FONT_PATH=/fonts
 
-RUN mkdir -p /usr/src/app
-COPY / /usr/src/app
-RUN cd /usr/src/app && npm install
-
+RUN mkdir -p /usr/src/app && mkdir -p /project
+WORKDIR /usr/src/app
 # only install minimal amount of tessera packages
 # be careful as some tessera packages collide with itself
-RUN npm install mbtiles \
-          tilelive-tmstyle \
-          tilelive-xray \
-          tilelive-http \
-          git+https://git@github.com/mojodna/node-tilejson.git\#always-xyz
+RUN npm install \
+    mbtiles@0.8.2  \
+    tilelive-tmstyle@0.4.2 \
+    tilelive-xray@0.2.0  \
+    tilelive-http@0.8.0
+
+COPY / /usr/src/app
+RUN npm install
 
 VOLUME /data
-ENV SOURCE_DATA_DIR=/data
-
-# destination of modified tm2 projects
-RUN mkdir -p /project
-ENV DEST_DATA_DIR=/project
+ENV SOURCE_DATA_DIR=/data \
+    DEST_DATA_DIR=/project \
+    PORT=80 \
+    MAPNIK_FONT_PATH=/fonts
 
 EXPOSE 80
-ENV PORT=80
-
 CMD ["/usr/src/app/run.sh"]
