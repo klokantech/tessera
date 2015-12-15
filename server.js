@@ -109,7 +109,8 @@ module.exports = function(opts, callback) {
       var queue = [];
       Object.keys(config).forEach(function(prefix) {
         queue.push(function(callback) {
-          tilelive.load(config[prefix], function(err, source) {
+          var url = config[prefix].source || config[prefix];
+          tilelive.load(url, function(err, source) {
             if (err) {
               throw err;
             }
@@ -119,11 +120,14 @@ module.exports = function(opts, callback) {
                 throw err;
               }
 
-              var uri = "http://" + req.headers.host +
-                ("/" + prefix + "/{z}/{x}/{y}.{format}".replace("{format}",
-                serve.getExtension(info.format))).replace(/\/+/g, "/");
+              var domains = [],
+                  tilePath = config[prefix].tilePath || "/{z}/{x}/{y}.{format}";
 
-              info.tiles = [uri];
+              if (config[prefix].domains && config[prefix].domains.length > 0) {
+                domains = config[prefix].domains.split(',');
+              }
+
+              info.tiles = serve.getTileUrls(domains, req.headers.host, prefix, tilePath, info.format);
               info.tilejson = "2.0.0";
 
               callback(null, info);

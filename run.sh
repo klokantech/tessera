@@ -3,6 +3,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+readonly DOMAINS=${DOMAINS}
 readonly SOURCE_DATA_DIR=${SOURCE_DATA_DIR:-/data}
 readonly DEST_DATA_DIR=${DEST_DATA_DIR:-/project}
 readonly TESSERA_CONFIG="$DEST_DATA_DIR/config.json"
@@ -37,7 +38,8 @@ function tessera_config_entry() {
     local tm2project=$1
     local serve_dir=${tm2project%.tm2}
     local serve_path=${serve_dir##*/}
-    echo "\"/${serve_path}\": \"tmstyle://${tm2project}\"," >> "$TESSERA_CONFIG"
+
+    echo "\"/${serve_path}\": {\"source\":\"tmstyle://${tm2project}\", \"domains\": \"${DOMAINS}\"}," >> "$TESSERA_CONFIG"
     echo "Serving ${tm2project##*/} at $serve_path"
 }
 
@@ -55,8 +57,6 @@ function create_tessera_config() {
     #echo "\"/\": \"mbtiles://${mbtiles_file}\"" >> "$TESSERA_CONFIG"
 
     echo '}' >> "$TESSERA_CONFIG"
-
-    echo "$TESSERA_CONFIG"
 }
 
 function replace_sources() {
