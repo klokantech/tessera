@@ -37,7 +37,8 @@ VOLUME /data
 ENV SOURCE_DATA_DIR=/data \
     DEST_DATA_DIR=/project \
     PORT=80 \
-    MAPNIK_FONT_PATH=/fonts
+    MAPNIK_FONT_PATH=/fonts \
+    DOMAINS=
 
 EXPOSE 80
 CMD ["/usr/src/app/run.sh"]
