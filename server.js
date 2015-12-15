@@ -6,7 +6,8 @@ process.env.UV_THREADPOOL_SIZE = process.env.UV_THREADPOOL_SIZE || Math.ceil(Mat
 
 var path = require("path");
 
-var cors = require("cors"),
+var async = require("async"),
+    cors = require("cors"),
     debug = require("debug"),
     express = require("express"),
     morgan = require("morgan"),
@@ -76,6 +77,42 @@ module.exports = function(opts, callback) {
       app.use(prefix, express.static(path.join(__dirname, "public")));
       app.use(prefix, express.static(path.join(__dirname, "bower_components")));
       app.use(prefix, serve(tilelive, config[prefix]));
+    });
+
+    // serve index.html even on the root
+    app.use("/", express.static(path.join(__dirname, "public")));
+    app.use("/", express.static(path.join(__dirname, "bower_components")));
+
+    // aggregate index.json on root for multiple sources
+    app.get("/index.json", function(req, res, next) {
+      var queue = [];
+      Object.keys(config).forEach(function(prefix) {
+        queue.push(function(callback) {
+          tilelive.load(config[prefix], function(err, source) {
+            if (err) {
+              throw err;
+            }
+
+            tessera.getInfo(source, function(err, info) {
+              if (err) {
+                throw err;
+              }
+
+              var uri = "http://" + req.headers.host +
+                ("/" + prefix + "/{z}/{x}/{y}.{format}".replace("{format}",
+                serve.getExtension(info.format))).replace(/\/+/g, "/");
+
+              info.tiles = [uri];
+              info.tilejson = "2.0.0";
+
+              callback(null, info);
+            });
+          });
+        });
+      });
+      return async.parallel(queue, function(err, results) {
+        return res.send(results);
+      });
     });
   }
 
