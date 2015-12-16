@@ -67,6 +67,11 @@ function replace_sources() {
         local project_name="${project_dir##*/}"
         local project_config_file="${project_dir%%/}/project.yml"
 
+        if [ "${vectortiles_name##*/}" = "${project_name%.*}" ]; then
+          echo "Name collision. The mbtiles and tm2 project can not have the same name."
+          exit 403
+        fi
+
         # project config will be copied to new folder because we
         # modify the source configuration of the style and don't want
         # that to effect the original file
