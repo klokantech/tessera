@@ -129,6 +129,10 @@ module.exports = function(opts, callback) {
                 domains = config[prefix].domains.split(',');
               }
 
+              if (prefix.length > 1) {
+                info.basename = prefix.substr(1);
+              }
+
               info.tiles = serve.getTileUrls(domains, req.headers.host, prefix,
                                              tilePath, info.format,
                                              req.query.key, req.protocol);
