@@ -104,8 +104,10 @@ function serve() {
             serve_xray "$mbtiles_file"
         fi
     else
-        echo "No MBTiles file found. Please add a .mbtiles file to your mounted folder."
-        exit 404
+        # Serve empty config
+        rm -f "$TESSERA_CONFIG"
+        echo '{}' >> "$TESSERA_CONFIG"
+        serve_config
     fi
 }
 
