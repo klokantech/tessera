@@ -111,13 +111,4 @@ function serve() {
     fi
 }
 
-function main() {
-    if [ "$(ls -A $SOURCE_DATA_DIR)" ]; then
-        serve
-    else
-        echo "No files found. Please mount the $SOURCE_DATA_DIR volume to a folder containing tm2 projects and mbtiles vector tile source."
-        exit 403
-    fi
-}
-
-main
+serve
