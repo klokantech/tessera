@@ -2,13 +2,20 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="//tileserver.com/v1/index.css" />
-  <script src="//tileserver.com/v1/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.klokantech.com/tileviewer/v1/index.css" />
+  <script src="//cdn.klokantech.com/tileviewer/v1/index.js"></script>
   <style>
-    #header {background-color:#a2d288;}
-    h2 {color:#82b268;}
-    #strap {visibility:hidden !important;}
-    #strap:before {content: 'Maps rendered by Mapnik from vector tiles';visibility:visible !important;}
+    #header {background:#3f9a6c url('http://osm2vectortiles.org/img/page-bg.jpg') left/auto 100%;}
+    h2 {color:#3f9a6c;}
+    #strap, #logo {display:none !important;}
+    #header:before {
+      content:'Maps rendered by Mapnik from vector tiles';
+      display:block;text-align:center;
+      font-family:sans-serif;font-weight:normal;
+      color:#fff;font-size:34px;line-height:120px;
+    }
+    #header {height:120px;}
+    #sidebar, #code, #map, #wall {top:120px;}
   </style>
 <body>
   <script>
