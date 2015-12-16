@@ -26,6 +26,8 @@ module.exports = function(opts, callback) {
         sources: process.env.SOURCE_CACHE_SIZE || opts.sourceCacheSize
       });
 
+  app.enable('trust proxy');
+
   callback = callback || function() {};
 
   // load and register tilelive modules
@@ -127,7 +129,9 @@ module.exports = function(opts, callback) {
                 domains = config[prefix].domains.split(',');
               }
 
-              info.tiles = serve.getTileUrls(domains, req.headers.host, prefix, tilePath, info.format, req.query.key);
+              info.tiles = serve.getTileUrls(domains, req.headers.host, prefix,
+                                             tilePath, info.format,
+                                             req.query.key, req.protocol);
               info.tilejson = "2.0.0";
 
               callback(null, info);
