@@ -11,6 +11,11 @@
     #strap:before {content: 'Maps rendered by Mapnik from vector tiles';visibility:visible !important;}
   </style>
 <body>
-  <script>tileserver({index: "index.json", tilejson: "/%n/index.json"});</script>
+  <script>
+    tileserver({
+      index: "index.json" + location.search,
+      tilejson: "/%n/index.json" + location.search
+    });
+  </script>
 </body>
 </html>

@@ -127,7 +127,7 @@ module.exports = function(opts, callback) {
                 domains = config[prefix].domains.split(',');
               }
 
-              info.tiles = serve.getTileUrls(domains, req.headers.host, prefix, tilePath, info.format);
+              info.tiles = serve.getTileUrls(domains, req.headers.host, prefix, tilePath, info.format, req.query.key);
               info.tilejson = "2.0.0";
 
               callback(null, info);
