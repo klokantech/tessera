@@ -54,7 +54,7 @@ function create_tessera_config() {
     ## Remove trailing comma unless adding vector tile source (below)
     #truncate --size=-2 "$TESSERA_CONFIG"
     # Always serve the vector tile source
-    echo "\"/$(basename ${mbtiles_file%.*})\": {\"source\":\"mbtiles://${mbtiles_file}\", \"domains\": \"${DOMAINS}\"}," >> "$TESSERA_CONFIG"
+    echo "\"/$(basename ${mbtiles_file%.*})\": {\"source\":\"mbtiles://${mbtiles_file}\", \"domains\": \"${DOMAINS}\"}" >> "$TESSERA_CONFIG"
 
     echo '}' >> "$TESSERA_CONFIG"
 }
