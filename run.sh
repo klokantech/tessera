@@ -12,14 +12,6 @@ readonly PORT=${PORT:-80}
 readonly CACHE_SIZE=${CACHE_SIZE:-10}
 readonly SOURCE_CACHE_SIZE=${SOURCE_CACHE_SIZE:-10}
 
-function serve_xray() {
-    local mbtiles_file=$1
-    exec bin/tessera.js "xray+mbtiles://$mbtiles_file" \
-        --PORT $PORT \
-        --cache-size $CACHE_SIZE \
-        --source-cache-size $SOURCE_CACHE_SIZE
-}
-
 function find_first_mbtiles() {
     for mbtiles_file in "$SOURCE_DATA_DIR"/*.mbtiles; do
         echo "${mbtiles_file}"
@@ -100,14 +92,9 @@ function serve() {
     local tm2project=$(find_first_tm2)
     if [ -f "$mbtiles_file" ]; then
         echo "Using $mbtiles_file as vector tile source"
-        if [ -d "$tm2project" ]; then
-            replace_sources "$mbtiles_file"
-            create_tessera_config "$mbtiles_file"
-            serve_config
-        else
-            echo "The mbtiles file is now served with X-Ray styles"
-            serve_xray "$mbtiles_file"
-        fi
+        replace_sources "$mbtiles_file"
+        create_tessera_config "$mbtiles_file"
+        serve_config
     else
         # Serve empty config
         rm -f "$TESSERA_CONFIG"
