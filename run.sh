@@ -98,7 +98,7 @@ function serve_config() {
 function serve() {
     local mbtiles_file=$(find_first_mbtiles)
     local tm2project=$(find_first_tm2)
-    echo "------- Find additional information on how to use this container under the following link: http://osm2vectortiles.org/docs/display-map-with-tileserver-mapnik/"
+    echo "------- Find additional information on how to use this container under the following link: http://osm2vectortiles.org/docs/start/"
     if [ -f "$mbtiles_file" ]; then
         echo "Using $mbtiles_file as vector tile source"
         if [ -d "$tm2project" ]; then
