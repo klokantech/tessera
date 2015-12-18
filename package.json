@@ -13,9 +13,6 @@
     "type": "git",
     "url": "https://github.com/klokantech/tileserver-tessera.git"
   },
-  "scripts": {
-    "prepublish": "npm install bower && bower install"
-  },
   "dependencies": {
     "async": "^1.5.0",
     "abaculus": "^1.2.1",
