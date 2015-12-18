@@ -97,8 +97,8 @@ module.exports = function(opts, callback) {
         app.use(prefix, cors());
       }
 
-      app.use(prefix, express.static(path.join(__dirname, "public")));
-      app.use(prefix, express.static(path.join(__dirname, "bower_components")));
+      //app.use(prefix, express.static(path.join(__dirname, "public")));
+      //app.use(prefix, express.static(path.join(__dirname, "bower_components")));
       app.use(prefix, serve(tilelive, config[prefix]));
     });
 
