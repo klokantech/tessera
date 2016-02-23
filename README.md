@@ -1,210 +1,52 @@
-# tessera
+# tileserver-mapnik
 
-tessera is a [tilelive](https://github.com/mapbox/tilelive.js)-based tile
-server.
+Mapnik-based tile server generating raster tiles from tilelive-js sources (MapBox Studio project + custom vector tiles for example).
+It supports also static maps API.
 
-Using the power of the tilelive ecosystem, it is capable of serving and
-rendering tiles from many sources.
+## How to use
 
-## Installation
+### Docker
 
-```bash
-npm install -g tessera
-npm install -g <tilelive modules...>
-```
+The easiest way to run tileserver-mapnik is using the precompiled docker container (https://hub.docker.com/r/klokantech/tileserver-mapnik/).
 
-## How to Use
+Detailed instructions how to use the tileserver-mapnik with docker: http://osm2vectortiles.org/docs/serve-raster-tiles-docker/
 
-tessera does not install tilelive providers itself; it is up to you to
-(globally) install any modules that you wish to use (along with dependencies
-present in your configuration; e.g. a TM2 style that loads data tiles from an
-HTTP source).
+### Without docker
 
-Modules listed in
-[tilelive-modules](https://github.com/mojodna/tilelive-modules) will be
-auto-detected and loaded if they have been installed. For other modules, you
-will need to `--require` them explicitly.
+Follow the commands in `Dockerfile` to install the necessary packages, download common fonts and prepare the environment.
 
-To serve up an [MBTiles](https://www.mapbox.com/developers/mbtiles/) archive
-using [node-mbtiles](https://github.com/mapbox/node-mbtiles):
-
-```bash
-npm install -g mbtiles
-tessera mbtiles://./whatever.mbtiles
-```
-
-To serve up a [TileMill](https://www.mapbox.com/tilemill/) (or
-[Carto](https://github.com/mapbox/carto)) project using
-[tilelive-carto](https://github.com/mojodna/tilelive-carto):
-
-```bash
-tessera carto+file://./project.mml
-```
-
-To serve up a [TM2](https://github.com/mapbox/tm2) style using
-[tilelive-tmstyle](https://github.com/mojodna/tilelive-tmstyle):
-
-```bash
-tessera tmstyle://./
-```
-
-**Note**: non-`mapbox:` sources may need to have their protocols changed;
-tessera requires that styles using HTTP-accessible data have `tilejson+http:`
-as their protocol where TM2 expects `http:`.  See
-[mojodna/tilelive-http#2](https://github.com/mojodna/tilelive-http/issues/2)
-for more information.
-
-To serve up a [TM2](https://github.com/mapbox/tm2) data source (it will use
-`data.yml` as the source of truth) using
-[tilelive-tmsource](https://github.com/mojodna/tilelive-tmsource):
-
-```bash
-tessera tmsource://./
-```
-
-To serve up a bare [Mapnik](https://github.com/mapnik/mapnik) stylesheet using
-[tilelive-mapnik](https://github.com/mapbox/tilelive-mapnik):
-
-```bash
-tessera mapnik://./stylesheet.xml
-```
-
-To serve up files from a filesystem using
-[tilelive-file](https://github.com/mapbox/tilelive-file):
-
-```bash
-tessera file://./tiles
-```
-
-To proxy HTTP-accessible tiles using
-[tilelive-http](https://github.com/mojodna/tilelive-http):
-
-```bash
-tessera http://tile.stamen.com/toner/{z}/{x}/{y}.png
-```
-
-To proxy Mapbox-hosted tiles using
-[tilelive-mapbox](https://github.com/mojodna/tilelive-mapbox):
-
-```bash
-tessera mapbox:///mapbox.mapbox-streets-v4
-```
-
-To proxy tiles with available
-[TileJSON](https://www.mapbox.com/developers/tilejson/) using
-[node-tilejson](https://github.com/mapbox/node-tilejson):
-
-```bash
-tessera tilejson+http://a.tiles.mapbox.com/v3/mapbox.mapbox-streets-v4.json
-```
-
-A TileJSON endpoint is available at
-[localhost:8080/index.json](http://localhost:8080/index.json) with various bits
-of metadata about the tiles being served.
-
-## Configuration
-
-Tessera has command-line options:
-
-```bash
-Usage: node tessera.js [uri] [options]
-
-uri     tilelive URI to serve
+Usage: `node bin/tessera.js [options]`
 
 Options:
-   -C SIZE, --cache-size SIZE          Set the cache size (in MB)  [10]
-   -c CONFIG, --config CONFIG          Provide a configuration file or directory
-   -p PORT, --port PORT                Set the HTTP Port  [8080]
-   -r MODULE, --require MODULE         Require a specific tilelive module
-   -S SIZE, --source-cache-size SIZE   Set the source cache size (in # of sources)  [10]
-   -v, --version                       Show version info
+ - `-c CONFIG` - Configuration file
+ - `-p PORT` - HTTP port [8080]
+ - `-C SIZE` - Cache size in MB [10]
+ - `-S SIZE` - Source cache size (in # of sources)  [10]
 
-A tilelive URI or configuration file is required.
-```
-
-Commonly used options can be set using the `TESSERA_OPTS` environment variable.
-
-This is what a configuration file looks like:
+#### Example configuration file
 
 ```javascript
 {
-  "/": {
-    "source": "mbtiles:///Users/seth/archive.mbtiles",
-    "cors": false,
-    "timing": false
+  "/style1": {
+    "source": "tmstyle://./style1.tm2"
   },
-  "/a": {
-    "source": "mbtiles:///Users/seth/archive.mbtiles",
-    "headers": {
-      "Cache-Control": "public,max-age={{#tileJSON}}86400{{/tileJSON}}{{#tile}}3600{{/tile}}",
-      "Surrogate-Control": "max-age=86400",
-      "Surrogate-Keys": "{{#tile}}z{{zoom}} x{{x}} y{{y}}{{/tile}}"
-    }
+  "/style2": {
+    "source": "tmstyle:///home/user/style2.tm2"
   },
-  "/b": "mbtiles:///Users/seth/archive.mbtiles"
+  "/vector": {
+    "source": "mbtiles:///home/user/data.mbtiles"
+  }
 }
 ```
 
-Header values are treated as
-[Mustache](http://mustache.github.io/mustache.5.html) (technically
-[Handlebars](http://handlebarsjs.com/)) templates, which allow them to vary by
-request. The following variables are available to header templates:
+**Note**: For tm2 styles, you need to make sure the content of style's `project.yml` (its `source` property) points to a valid mbtiles file (e.g. `source: "mbtiles://./data.mbtiles"`).
 
-* `tile.retina` - for retina (`@2x`) requests
-* `tile.zoom` - zoom (for tile requests)
-* `tile.x` - row (for tile requests)
-* `tile.y` - column (for tile requests)
-* `tile.format` - requested format
-* `tileJSON` - for TileJSON requests
-* `200` - HTTP 200
-* `404` - HTTP 404
-* `invalidFormat` - the requested format did not match what the tilelive source
-  provides
-* `invalidZoom` - the requested zoom is outside the available range
-* `invalidCoordinates` - the requested coordinates are outside the available bounds
+## Available URLs
 
-CORS and `X-Response-Time` can be disabled per-style:
-
-```javascript
-{
-  "cors": false,
-  "timing": false
-}
-```
-
-(Note that enabling for `/` will propagate to all subdirectories, as they act
-as middleware.)
-
-Custom tile paths may be set per-style:
-
-```javascript
-{
-  "tilePath": "/{z}/{x}/{y}-debug.{format}"
-}
-```
-
-The default tile path is:
-
-```javascript
-{
-  "tilePath": "/{z}/{x}/{y}.{format}"
-}
-```
-
-(_Note_: the final `.` will be expanded to transparently support retina
-requests (effectively `/{z}/{x}/{y}@2x.{format}`).)
-
-If `--config` is set to a directory, all JSON files in it will be concatenated
-together to form a single configuration. In the case of repeated options or
-paths, the last one will win (where files are loaded in alphabetical order).
-
-## Environment Variables
-
-* `PORT` - Port to bind to. Defaults to `8080`.
-* `CACHE_SIZE` - Cache size (in MB) for
-  [tilelive-cache](https://github.com/mojodna/tilelive-cache). Defaults to
-  10MB.
-* `SOURCE_CACHE_SIZE` - Number of sources to cache (for
-  [tilelive-cache](https://github.com/mojodna/tilelive-cache)). Defaults to 6.
-  *NOTE*: implicit retina versions count as an extra source.
-* `TESSERA_OPTS` - Additional command-line arguments.
+- If you visit the server on the configured port (default 8080) you should see your maps appearing in the browser.
+- The tiles itself are served at `/{basename}/{z}/{x}/{y}[@2x].{format}`
+  - The optional `@2x` part can be used to render HiDPI (retina) tiles
+- Static images are rendered at:
+  - `/{basename}/static/{lon},{lat},{zoom}/{width}x{height}[@2x].{format}` (center-based)
+  - `/{basename}/static/{minx},{miny},{maxx},{maxy}/{zoom}[@2x].{format}` (area-based)
+- TileJSON at `/{basename}/index.json`
