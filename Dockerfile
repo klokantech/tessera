@@ -25,10 +25,12 @@ WORKDIR /usr/src/app
 # only install minimal amount of tessera packages
 # be careful as some tessera packages collide with itself
 RUN npm install \
-    mbtiles@0.8.2  \
-    tilelive-tmstyle@0.4.2 \
-    tilelive-xray@0.2.0  \
-    tilelive-http@0.8.0
+    mbtiles@0.8.x  \
+    tilelive-tmstyle@0.5.x \
+    tilelive-xray@0.2.x  \
+    tilelive-http@0.10.x
+
+RUN npm outdated
 
 COPY / /usr/src/app
 RUN npm install
