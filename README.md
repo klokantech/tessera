@@ -9,7 +9,7 @@ It supports also static maps API.
 
 The easiest way to run tileserver-mapnik is using the precompiled docker container (https://hub.docker.com/r/klokantech/tileserver-mapnik/).
 
-Detailed instructions how to use the tileserver-mapnik with docker: http://osm2vectortiles.org/docs/serve-raster-tiles-docker/
+Detailed instructions how to use the tileserver-mapnik with docker: http://osm2vectortiles.org/docs/serve-raster-tiles-docker
 
 ### Without docker
 
