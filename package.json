@@ -14,8 +14,8 @@
     "url": "https://github.com/klokantech/tileserver-tessera.git"
   },
   "dependencies": {
-    "async": "1.x",
     "abaculus": "1.x",
+    "async": "1.x",
     "cachecache": "1.x",
     "clone": "1.x",
     "cors": "2.x",
