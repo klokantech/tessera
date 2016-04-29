@@ -22,13 +22,6 @@ ENV MAPNIK_FONT_PATH=/fonts
 
 RUN mkdir -p /usr/src/app && mkdir -p /project
 WORKDIR /usr/src/app
-# only install minimal amount of tessera packages
-# be careful as some tessera packages collide with itself
-RUN npm install \
-    mbtiles@0.8.2  \
-    tilelive-tmstyle@0.4.2 \
-    tilelive-xray@0.2.0  \
-    tilelive-http@0.8.0
 
 COPY / /usr/src/app
 RUN npm install
