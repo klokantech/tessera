@@ -21,7 +21,7 @@
     "cors": "2.x",
     "debug": "2.x",
     "express": "4.x",
-    "handlebars": "4.",
+    "handlebars": "4.x",
     "morgan": "1.x",
     "nomnom": "1.x",
     "response-time": "2.x",
