@@ -27,9 +27,10 @@ RUN wget -q -P /fonts https://github.com/aaronlidman/Toner-for-Tilemill/raw/mast
 RUN mkdir -p /usr/src/app && mkdir -p /project
 WORKDIR /usr/src/app
 
-COPY / /usr/src/app
-
+COPY package.json /usr/src/app/
 RUN npm install
+
+COPY . /usr/src/app
 
 VOLUME /data
 EXPOSE 80
