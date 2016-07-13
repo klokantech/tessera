@@ -24,11 +24,13 @@
     "nomnom": "^1.8.1",
     "response-time": "^2.2.0",
     "sphericalmercator": "^1.0.2",
+    "tilejson": "^1.0.1",
     "tilelive": "^5.3.3",
     "tilelive-cache": "^0.7.1",
     "tilelive-http": "^0.11.1",
     "tilelive-modules": "^0.3.1",
     "tilelive-tmstyle": "^0.6.0",
+    "tilelive-vector": "^3.9.3",
     "tilelive-xray": "^0.2.0"
   }
 }
