@@ -1,5 +1,5 @@
 {
-  "name": "tileserver-tessera",
+  "name": "tileserver-mapnik",
   "version": "0.8.0",
   "description": "A tilelive-based tile server",
   "main": "lib/app.js",
@@ -9,25 +9,26 @@
     "Petr Sloup <petr.sloup@klokantech.com>"
   ],
   "license": "BSD-2-Clause",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/klokantech/tileserver-tessera.git"
-  },
+  "repository": "showcaseidx/tileserver-mapnik",
   "dependencies": {
-    "async": "^1.5.0",
     "abaculus": "^1.2.1",
+    "async": "^1.5.0",
     "cachecache": "^1.0.1",
     "clone": "^1.0.2",
     "cors": "^2.5.2",
     "debug": "^2.1.3",
     "express": "^4.10.3",
     "handlebars": "^4.0.5",
+    "mbtiles": "^0.9.0",
     "morgan": "^1.5.0",
     "nomnom": "^1.8.1",
     "response-time": "^2.2.0",
     "sphericalmercator": "^1.0.2",
     "tilelive": "^5.3.3",
-    "tilelive-cache": "^0.6.1",
-    "tilelive-modules": "^0.2.0"
+    "tilelive-cache": "^0.7.1",
+    "tilelive-http": "^0.11.1",
+    "tilelive-modules": "^0.3.1",
+    "tilelive-tmstyle": "^0.6.0",
+    "tilelive-xray": "^0.2.0"
   }
 }
